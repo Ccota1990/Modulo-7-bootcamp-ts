@@ -16,3 +16,4 @@ export type Estado =
   | "GAME_OVER_MAXIMO_INTENTOS";
 
 export const MAXIMO_INTENTOS: number = 5;
+ 
