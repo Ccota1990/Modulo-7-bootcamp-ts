@@ -1,82 +1,152 @@
-import { Estado, MAXIMO_INTENTOS, partida } from "./modelo";
-import { comprobarNumero, generarNumeroAleatorio } from "./motor";
+import{
+    puntuacionInicial,
+    resetPuntuacion,
+    sumarPuntuacion,
+} from "./modelo"
 
-export const muestraNumeroDeIntentos = () => {
-  const elementoIntentos = document.getElementById("intentos");
+import { dameCarta } from "./motor";
 
-  if (elementoIntentos) {
-    elementoIntentos.innerHTML = `${partida.numeroDeIntentos} de ${MAXIMO_INTENTOS}`;
-  } else {
-    console.error(
-      "muestraNumeroDeIntento: No se ha encontrado el elemento con id intentos"
-    );
-  }
-};
 
-export const gestionarGameOver = (estado: Estado) => {
-  if (estado === "GAME_OVER_MAXIMO_INTENTOS") {
-    const elementoComprobar = document.getElementById("comprobar");
-    if (elementoComprobar && elementoComprobar instanceof HTMLButtonElement) {
-      elementoComprobar.disabled = true;
-    } else {
-      console.error(
-        "gestionarGameOver: No se ha encontrado el elemento con id comprobar"
-      );
+export const muestraPuntuacion = () => {
+    const puntuacion = document.getElementById ("puntos")
+    if(puntuacion !== null && puntuacion !== undefined && puntuacion instanceof HTMLElement) {
+        puntuacion.innerHTML = `Tu puntuación es ${puntuacionInicial.toString()}`
     }
-  }
 };
 
-export const muestraMensajeComprobacion = (texto: string, estado: Estado) => {
-  let mensaje: string = "";
-  switch (estado) {
-    case "NO_ES_UN_NUMERO":
-      mensaje = `"${texto}" no es un numero 🤨, prueba otra vez`;
-      break;
-    case "EL_NUMERO_ES_MAYOR":
-      mensaje = `UUYYY ! El número ${texto} es MAYOR que el número secreto`;
-      break;
-    case "EL_NUMERO_ES_MENOR":
-      mensaje = `UUYYY ! El número ${texto} es MENOR que el número secreto`;
-      break;
-    case "ES_EL_NUMERO_SECRETO":
-      mensaje = `¡¡¡Enhorabuena, has acertado el número!!! 🎉🎉🎉`;
-      break;
-    case "GAME_OVER_MAXIMO_INTENTOS":
-      mensaje = `🪦 GAME OVER, has superado el número máximo de intentos`;
-      break;
-    default:
-      mensaje = "No se que ha pasado, pero no deberías estar aquí";
-      break;
-  }
+export const pideCarta = () => {
+    const carta = dameCarta();
+    const url = getUrl(carta);
+    muestraCarta(url);
+    sumarPuntuacion(carta);
+    muestraPuntuacion();
+    comprobarPuntuacion();
 
-  const elementoResultado = document.getElementById("resultado");
-  if (elementoResultado) {
-    elementoResultado.innerHTML = mensaje;
-  } else {
-    console.error(
-      "muestraMensajeComprobacion: No se ha encontrado el elemento con id resultado"
-    );
-  }
 };
 
-export const handleCompruebaClick = () => {
-  let texto: string = "";
-  const inputElement = document.getElementById("numero");
-
-  if (inputElement && inputElement instanceof HTMLInputElement) {
-    texto = inputElement.value;
-  }
-
-  const estado: Estado = comprobarNumero(texto);
-  muestraMensajeComprobacion(texto, estado);
-  partida.numeroDeIntentos++;
-  muestraNumeroDeIntentos();
-  gestionarGameOver(estado);
+const getUrl = (carta: number) :string =>{
+    switch(carta){
+        case 1: return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/1_as-copas.jpg";
+             
+        case 2: return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/2_dos-copas.jpg";
+            
+        case 3: return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/3_tres-copas.jpg";
+             
+        case 4: return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/4_cuatro-copas.jpg";
+             
+        case 5: return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/5_cinco-copas.jpg";
+             
+        case 6: return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/6_seis-copas.jpg";
+             
+        case 7: return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/7_siete-copas.jpg";
+             
+        case 10: return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/10_sota-copas.jpg";
+             
+        case 11: return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/11_caballo-copas.jpg";
+             
+        case 12: return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/12_rey-copas.jpg";
+         
+        default: return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg"; 
+    }
 };
 
-export const iniciarPartida = () => {
-  // TODO: estas dos lineas podríamos pasarlas al motor y poner un método nuevaPartida
-  partida.numeroParaAcertar = generarNumeroAleatorio();
-  partida.numeroDeIntentos = 0;
-  muestraNumeroDeIntentos();
+export const muestraCarta = (url: string) =>{
+    const imagenCarta = document.getElementById("carta")
+    if(imagenCarta !== null && imagenCarta !== undefined && imagenCarta instanceof HTMLImageElement){
+        imagenCarta.src = url
+    }
 };
+
+
+export const comprobarPuntuacion =() =>{
+    if(puntuacionInicial>7.5){
+        acabarPartida("¡¡Game over!!")
+    }
+    
+    if(puntuacionInicial===7.5){
+        acabarPartida("¡Lo has clavado! ¡Enhorabuena!")
+    }
+    
+};
+const acabarPartida = (mensaje : string) => {
+    let boton = document.getElementById("pedirCarta")
+    if(boton  !== null && boton!== undefined && boton instanceof HTMLButtonElement){
+        boton.disabled = true 
+    };
+    const resultado = document.getElementById ("resultado")
+    if(resultado !== null && resultado !== undefined && resultado instanceof HTMLElement) {
+        resultado.innerHTML = mensaje
+    }
+    modificarEstadoBoton("visible")
+    
+};
+
+const resultados = () => {
+    const resultado = document.getElementById ("resultado")
+        if(resultado!== null && resultado !== undefined && resultado instanceof HTMLElement){
+            if(puntuacionInicial<4){
+                resultado.innerHTML = "Has sido muy conservador"
+            }
+            if(puntuacionInicial===5) {
+                resultado.innerHTML = "Te ha entrado el canguelo eh?"
+            }
+            if(puntuacionInicial>=6 && puntuacionInicial<=7){
+                resultado.innerHTML = "Casi casi..."
+            }
+            if(puntuacionInicial===7.5){
+                resultado.innerHTML = "¡Lo has clavado! ¡Enhorabuena!"
+            }
+};
+};
+const deshabilitarBoton = () =>{
+    let boton = document.getElementById("pedirCarta")
+    if(boton !== null && boton !== undefined && boton instanceof HTMLButtonElement){
+        boton.disabled = true 
+    };
+};
+
+const modificarEstadoBoton = (estado: string) =>{
+    const botonNuevaPartida = document.getElementById("nuevaPartida")
+    if(botonNuevaPartida !== null && botonNuevaPartida !== undefined && botonNuevaPartida instanceof HTMLButtonElement){
+    botonNuevaPartida.style.visibility=estado;
+    };
+};
+
+export const mePlanto = () => {
+    deshabilitarBoton();
+    resultados();
+    modificarEstadoBoton("visible"); 
+};
+
+const resetCarta = () => {
+    let cartaElement = document.getElementById("carta")
+    if(cartaElement !== null && cartaElement !== undefined && cartaElement instanceof HTMLImageElement){
+        cartaElement.src = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg"
+    }
+
+};
+
+const modificarBotonPedirCarta = () =>{
+    let botonPedirCarta = document.getElementById("pedirCarta")
+    if(botonPedirCarta !== null && botonPedirCarta !== undefined && botonPedirCarta instanceof HTMLButtonElement){
+        botonPedirCarta.disabled=false
+    }
+};
+
+const resetMensaje =() =>{
+    let resultado = document.getElementById ("resultado")
+    if(resultado !== null && resultado !== undefined && resultado instanceof HTMLElement){
+       resultado.innerHTML = ""
+    }
+};
+
+
+export const nuevaPartida = () =>{ 
+    resetPuntuacion()
+    resetCarta()
+    modificarBotonPedirCarta()
+    modificarEstadoBoton("hidden")
+    resultados()
+    resetMensaje()
+};
+

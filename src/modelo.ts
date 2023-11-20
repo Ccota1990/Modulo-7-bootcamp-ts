@@ -1,19 +1,18 @@
-interface Partida {
-  numeroDeIntentos: number;
-  numeroParaAcertar: number;
-}
+export let puntuacionInicial : number = 0;
 
-export const partida: Partida = {
-  numeroDeIntentos: 0,
-  numeroParaAcertar: 0, // TODO: inicializar esto en el motor cuando arranque la partida
+
+export const sumarPuntuacion = (carta: number) =>{
+    if(carta<8){
+        puntuacionInicial = puntuacionInicial + carta 
+    }else{
+        puntuacionInicial = puntuacionInicial + 0.5
+    }  
 };
 
-export type Estado =
-  | "NO_ES_UN_NUMERO"
-  | "EL_NUMERO_ES_MAYOR"
-  | "EL_NUMERO_ES_MENOR"
-  | "ES_EL_NUMERO_SECRETO"
-  | "GAME_OVER_MAXIMO_INTENTOS";
-
-export const MAXIMO_INTENTOS: number = 5;
- 
+export const resetPuntuacion = () => {
+    let puntuacion = document.getElementById("puntos")
+    if(puntuacion !== null && puntuacion !== undefined && puntuacion instanceof HTMLElement){
+        puntuacion.innerHTML = "0"
+        puntuacionInicial = 0
+    }
+};

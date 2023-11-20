@@ -5,17 +5,21 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <link rel="stylesheet" href="/src/style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <title>Vite + TS</title>
   </head>
   <body>
     <div id="app">
-      <h1>Adivina el numero</h1>
+      <h1>Juego de 7 y medio</h1>
+      <img id="carta" src="https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg" />
       <div>
-        <input type="number" id="numero" />
-        <button id="comprobar">Comprobar</button>
+        <button id="pedirCarta">Pedir carta</button>
+        <button id="meplanto">Me planto</button>
       </div>
-      <div id="resultado"></div>
-      <div id="intentos"></div>
+      <div id="textos">
+        <div id="puntos"> </div>
+        <div id="resultado"></div> 
+      </div>
+      <button id="nuevaPartida">Nueva partida</button> 
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
