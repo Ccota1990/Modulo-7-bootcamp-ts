@@ -1,12 +1,12 @@
 export let puntuacionInicial : number = 0;
 
 
-export const sumarPuntuacion = (carta: number) =>{
-    if(carta<8){
-        puntuacionInicial = puntuacionInicial + carta 
-    }else{
-        puntuacionInicial = puntuacionInicial + 0.5
-    }  
+export const obtenerValorCarta = (carta: number) =>{
+    return carta < 8 ? carta :0.5;
+};
+
+export const sumarPuntuacion = (valorCarta : number) =>{
+        puntuacionInicial = puntuacionInicial + valorCarta;   
 };
 
 export const resetPuntuacion = () => {
@@ -16,3 +16,4 @@ export const resetPuntuacion = () => {
         puntuacionInicial = 0
     }
 };
+
