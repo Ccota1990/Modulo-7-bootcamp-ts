@@ -53,7 +53,7 @@ describe("resultados", () => {
         const puntos = 5;
 
         //Act
-        const resultado = comprobarPuntuacion(puntos);
+        const resultado = resultados(puntos);
 
         //Assert
         expect(resultado).toBe("Te ha entrado el canguelo eh?");
@@ -64,7 +64,7 @@ describe("resultados", () => {
         const puntos = 7;
 
         //Act
-        const resultado = comprobarPuntuacion(puntos);
+        const resultado = resultados(puntos);
 
         //Assert
         expect(resultado).toBe("Casi casi...");
